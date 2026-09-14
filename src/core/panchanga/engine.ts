@@ -6,16 +6,18 @@ const norm = (x: number) => ((x % 360) + 360) % 360;
 const NAKSHATRAS = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishtha','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
 
 export interface PanchangaOptions {
-  /** Panchanga nakshatra/yoga longitude convention. Default is tropical baseline. */
   sidereal?: boolean;
+  /** Optional calendar-rule identifier; calculation remains observational/astronomical. */
+  ruleSet?: string;
 }
 
 /**
- * Deterministic baseline Panchanga calculation.
+ * Deterministic Panchanga baseline from the selected longitude convention.
  *
- * This is intentionally labelled approximate: a production Panchanga provider
- * must supply the chosen ephemeris, observer/location policy, ayanamsa and
- * local-calendar rules before claiming authoritative calendar results.
+ * Important boundary: this function computes geometric ingredients only. It
+ * must not be treated as an authoritative regional Panchanga without a
+ * validated ephemeris, observer/location policy, ayanamsa, sunrise/day-boundary
+ * convention, and named calendar rule set.
  */
 export function computePanchanga(date: Date, options: PanchangaOptions = {}): PanchangaSnapshot {
   const jd = julianDate(date);
@@ -23,6 +25,9 @@ export function computePanchanga(date: Date, options: PanchangaOptions = {}): Pa
   const tropicalMoon = moonEclipticPosition(jd).longitudeDeg;
   const sun = options.sidereal ? tropicalToSidereal(tropicalSun, jd) : tropicalSun;
   const moon = options.sidereal ? tropicalToSidereal(tropicalMoon, jd) : tropicalMoon;
+
+  // Tithi is defined by the 12° geocentric Sun-Moon elongation; using the
+  // unsimplified tropical elongation keeps the phase geometry convention clear.
   const phase = norm(tropicalMoon - tropicalSun);
   const tithiNumber = Math.min(30, Math.floor(phase / 12) + 1) as Tithi['number'];
   const tithi: Tithi = {
@@ -30,6 +35,7 @@ export function computePanchanga(date: Date, options: PanchangaOptions = {}): Pa
     paksha: tithiNumber <= 15 ? 'Shukla' : 'Krishna',
     phaseAngleDeg: phase,
   };
+
   const segment = 360 / 27;
   const nakIndex = Math.min(26, Math.floor(moon / segment));
   const local = moon - nakIndex * segment;
@@ -40,6 +46,7 @@ export function computePanchanga(date: Date, options: PanchangaOptions = {}): Pa
     longitudeEndDeg: (nakIndex + 1) * segment,
     pada: Math.min(4, Math.floor(local / (segment / 4)) + 1),
   };
+
   return {
     jd,
     tithi,
