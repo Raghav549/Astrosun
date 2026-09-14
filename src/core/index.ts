@@ -7,6 +7,7 @@ export * from './astro/quality';
 export * from './astro/validation';
 export * from './astro/invariants';
 export * from './astro/observer';
+export * from './astro/topocentric';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/rules';
