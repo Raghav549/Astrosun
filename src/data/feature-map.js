@@ -1,0 +1,14 @@
+export const ASTROSUN_MODULES = [
+  {id:'core',name:'Core Cosmos',pages:['Home','Cosmic Dashboard','Live Sky','Today in Space','Universe Clock','Solar System','Celestial Events','Observatory']},
+  {id:'kundali',name:'Kundali Engine',pages:['Birth Data','Rashi Chart','Navamsa','Bhava Chart','Planetary Table','Nakshatra','Pada','Lagna','Bhava Lords','Aspects','Yogas','Shadbala','Vimshottari Dasha','Antardasha','Transit Overlay','Gochar','Combustion','Retrograde','Planet Strength','Kundali Compare','Muhurat Selection','Question Chart','Annual Chart']},
+  {id:'panchanga',name:'Panchanga',pages:['Today Panchanga','Tithi','Vara','Nakshatra','Yoga','Karana','Sunrise','Sunset','Moonrise','Moonset','Rahu Kalam','Yamaganda','Gulika','Abhijit Muhurta','Choghadiya','Hora','Vedic Calendar','Festival Calendar','Ekadashi','Sankranti','Amanta/Purnimanta']},
+  {id:'astronomy',name:'Astronomy Lab',pages:['Planet Positions','Orbital Elements','Kepler Solver','N-body Playground','Earth Rotation','Time Scales','Coordinate Frames','Equatorial Coordinates','Ecliptic Coordinates','Topocentric View','Heliocentric View','Geocentric View','Parallax','Angular Separation','Conjunction Finder','Opposition Finder','Retrograde Geometry','Eclipse Geometry','Lunar Nodes','Precession']},
+  {id:'astrophysics',name:'Astrophysics',pages:['Mass & Radius','Gravity','Density','Atmosphere','Temperature','Magnetic Field','Radiation','Luminosity','Spectral Class','Exoplanets','Compact Objects','Black Holes','Neutron Stars','Gravitational Waves','Cosmology','Dark Matter','Dark Energy','Stellar Evolution','Galactic Context','Solar Physics']},
+  {id:'materials',name:'Stone & Material Lab',pages:['Mineral Explorer','Crystal Systems','Chemical Composition','Hardness','Density','Optics','Spectra','Thermal Properties','Magnetic Properties','Traditional Associations','Evidence Matrix'],
+  },
+  {id:'research',name:'Research Intelligence',pages:['Paper Search','Paper Reader','Method Extractor','Evidence Graph','Claim Checker','Source Timeline','Research Notes','Astro Datasets','Open Problems','Model Comparisons','AI Synthesis','Citation View']},
+  {id:'ai',name:'AI Council',pages:['Multi-Model Query','Consensus','Disagreement','Source Grounding','Calculation Verification','Fallback Router','Prompt Policy','Answer Trace','Confidence','Model Health']},
+  {id:'learning',name:'School & Life',pages:['Learn Astronomy','Learn Jyotisha','Physics Basics','Calendar Science','Sky Observation','Daily Challenge','Quizzes','Experiment Lab','Glossary','Research Skills','Study Planner','Reflection Journal']},
+  {id:'system',name:'System',pages:['Settings','Data Sources','API Health','Cache','Privacy','About','Methodology','Scientific Limits','Traditional Limits','Changelog']}
+];
+export const ASTROSUN_PAGE_COUNT = ASTROSUN_MODULES.reduce((n,m)=>n+m.pages.length,0);
