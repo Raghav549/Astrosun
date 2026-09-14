@@ -19,6 +19,7 @@ export * from './astro/observer-geometry';
 export * from './astro/spherical-observer';
 export * from './astro/refraction';
 export * from './astro/apparent-disk';
+export * from './astro/sky-event-provider';
 export * from './astro/quality';
 export * from './astro/evidence-contract';
 export * from './astro/validation';
