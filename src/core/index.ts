@@ -25,6 +25,7 @@ export * from './dynamics/invariants';
 export * from './physics/constants';
 export * from './physics/astro-formulas';
 export * from './research/evidence';
+export * from './research/literature-map';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/names';
