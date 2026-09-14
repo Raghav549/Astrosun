@@ -11,6 +11,8 @@ export * from './astro/observer';
 export * from './astro/topocentric';
 export * from './astro/horizons';
 export * from './astro/rise-set';
+export * from './dynamics/state';
+export * from './dynamics/kepler';
 export * from './research/evidence';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
