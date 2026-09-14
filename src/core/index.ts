@@ -28,6 +28,7 @@ export * from './physics/astro-formulas';
 export * from './research/evidence';
 export * from './research/literature-map';
 export * from './time/scales';
+export * from './time/earth-orientation';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/names';
 export * from './panchanga/rules';
