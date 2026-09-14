@@ -9,6 +9,7 @@ export * from './astro/validation-matrix';
 export * from './astro/invariants';
 export * from './astro/observer';
 export * from './astro/topocentric';
+export * from './research/evidence';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/rules';
