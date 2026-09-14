@@ -4,6 +4,11 @@ export interface Tithi { number: TithiNumber; paksha: Paksha; phaseAngleDeg: num
 export interface Nakshatra { number: number; name: string; longitudeStartDeg: number; longitudeEndDeg: number; pada: number; }
 export interface PanchangaSnapshot {
   jd: number;
+  localDate: string;
+  timeZone?: string;
+  location?: { latitudeDeg: number; longitudeDeg: number; elevationMeters: number };
+  sunrise?: string;
+  sunset?: string;
   tithi: Tithi;
   nakshatra: Nakshatra;
   yogaDeg: number;
