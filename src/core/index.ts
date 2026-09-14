@@ -50,5 +50,6 @@ export * from './panchanga/rules';
 export * from './panchanga/types';
 export * from './panchanga/location';
 export * from './panchanga/regional';
+export * from './panchanga/day-boundary';
 export * from './panchanga/engine';
 export * from './runtime';
