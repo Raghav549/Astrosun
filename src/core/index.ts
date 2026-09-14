@@ -20,6 +20,7 @@ export * from './physics/constants';
 export * from './research/evidence';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
+export * from './panchanga/names';
 export * from './panchanga/rules';
 export * from './panchanga/types';
 export * from './panchanga/engine';
