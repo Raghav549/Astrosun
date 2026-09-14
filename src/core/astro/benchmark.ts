@@ -13,11 +13,7 @@ export interface BenchmarkReport {
   thresholds: BenchmarkThresholds;
 }
 
-/**
- * Evaluate a provider against externally supplied reference points.
- * Reference data must be immutable/versioned and supplied by the caller;
- * AstroSun never invents validation fixtures.
- */
+/** Evaluate a provider against immutable/versioned reference cases supplied by the caller. */
 export function benchmarkEphemeris(
   provider: string,
   reference: string,

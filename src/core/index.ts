@@ -3,6 +3,8 @@ export * from './astro/events';
 export * from './astro/frames';
 export * from './astro/angles';
 export * from './astro/provider';
+export * from './astro/provider-contracts';
+export * from './astro/benchmark';
 export * from './astro/planetary';
 export * from './astro/eclipse';
 export * from './astro/quality';
