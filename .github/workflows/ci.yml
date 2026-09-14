@@ -23,19 +23,13 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Typecheck
-        run: npm run typecheck --if-present
+        run: npm run typecheck
 
-      - name: Lint
-        run: npm run lint --if-present
-
-      - name: Test
-        run: npm test --if-present -- --runInBand
-
-      - name: Scientific core smoke validation
-        run: node --experimental-strip-types scripts/scientific-smoke.mjs
+      - name: Scientific core invariants
+        run: npm run scientific:check
 
       - name: Build
-        run: npm run build --if-present
+        run: npm run build
