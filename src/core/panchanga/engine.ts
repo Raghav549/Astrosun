@@ -2,6 +2,7 @@ import { julianDate, moonEclipticPosition, sunEclipticLongitude } from '../astro
 import { tropicalToSidereal } from './ayanamsa';
 import { karanaName, yogaName } from './names';
 import { civilDateParts, validatePanchangaLocation, type PanchangaLocation } from './location';
+import { getRegionalPolicy, validateRegionalContext } from './regional';
 import type { Nakshatra, PanchangaSnapshot, Tithi } from './types';
 
 const norm = (x: number) => ((x % 360) + 360) % 360;
@@ -13,13 +14,12 @@ export interface PanchangaOptions {
   location?: PanchangaLocation;
 }
 
-/**
- * Deterministic Panchanga baseline with an explicit civil-location context.
- * Astronomical quantities remain approximate until a validated high-precision
- * provider and regional calendar rule-set are installed.
- */
+/** Deterministic Panchanga baseline with explicit civil location and regional-policy validation. */
 export function computePanchanga(date: Date, options: PanchangaOptions = {}): PanchangaSnapshot {
   if (options.location) validatePanchangaLocation(options.location);
+  if (options.ruleSet?.startsWith('regional:') && options.location) {
+    validateRegionalContext(getRegionalPolicy(options.ruleSet.slice('regional:'.length)), options.location);
+  }
   const jd = julianDate(date);
   const tropicalSun = sunEclipticLongitude(jd);
   const tropicalMoon = moonEclipticPosition(jd).longitudeDeg;
@@ -31,6 +31,7 @@ export function computePanchanga(date: Date, options: PanchangaOptions = {}): Pa
   const segment = 360 / 27;
   const nakIndex = Math.min(26, Math.floor(moon / segment));
   const local = moon - nakIndex * segment;
+  const yogaDeg = norm(sun + moon);
   const nakshatra: Nakshatra = { number: nakIndex + 1, name: NAKSHATRAS[nakIndex], longitudeStartDeg: nakIndex * segment, longitudeEndDeg: (nakIndex + 1) * segment, pada: Math.min(4, Math.floor(local / (segment / 4)) + 1) };
   const halfTithiIndex = Math.floor(phase / 6) + 1;
   const localParts = options.location ? civilDateParts(date, options.location.timeZone) : undefined;
@@ -41,8 +42,8 @@ export function computePanchanga(date: Date, options: PanchangaOptions = {}): Pa
     location: options.location ? { latitudeDeg: options.location.latitudeDeg, longitudeDeg: options.location.longitudeDeg, elevationMeters: options.location.elevationMeters ?? 0 } : undefined,
     tithi,
     nakshatra,
-    yogaDeg: norm(sun + moon),
-    yogaName: yogaName(norm(sun + moon)),
+    yogaDeg,
+    yogaName: yogaName(yogaDeg),
     karanaIndex: halfTithiIndex,
     karanaName: karanaName(halfTithiIndex),
     sunLongitudeDeg: sun,
