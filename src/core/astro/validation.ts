@@ -10,10 +10,6 @@ export interface ValidationRecord {
   notes: string[];
 }
 
-/**
- * Registry for measured comparison against an authoritative reference.
- * No numerical claim is made unless a reproducible benchmark populates it.
- */
 export interface EphemerisBenchmarkCase {
   date: string;
   expected: EclipticPosition;
@@ -26,11 +22,19 @@ export function angularSeparationArcsec(aDeg: number, bDeg: number): number {
   return delta * 3600;
 }
 
-export function validateLongitude(
-  actual: EclipticPosition,
-  expected: EclipticPosition,
-): number {
+export function validateLongitude(actual: EclipticPosition, expected: EclipticPosition): number {
+  if (actual.body !== expected.body) throw new Error(`Cannot compare ${actual.body} with ${expected.body}.`);
   return angularSeparationArcsec(actual.longitudeDeg, expected.longitudeDeg);
+}
+
+export function summarizeLongitudeErrors(cases: readonly EphemerisBenchmarkCase[]) {
+  if (!cases.length) throw new Error('At least one benchmark case is required.');
+  const errors = cases.map((item) => validateLongitude(item.actual, item.expected));
+  return {
+    samples: errors.length,
+    meanArcsec: errors.reduce((sum, value) => sum + value, 0) / errors.length,
+    maxArcsec: Math.max(...errors),
+  };
 }
 
 export function emptyValidationRecord(provider: string, reference: string): ValidationRecord {
