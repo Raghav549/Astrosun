@@ -5,6 +5,7 @@ export * from './astro/angles';
 export * from './astro/provider';
 export * from './astro/quality';
 export * from './astro/validation';
+export * from './astro/invariants';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/rules';
