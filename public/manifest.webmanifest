@@ -1,0 +1,10 @@
+{
+  "name": "AstroSun — Cosmic Intelligence",
+  "short_name": "AstroSun",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5fbf8",
+  "theme_color": "#0b6b5b",
+  "description": "Research-oriented astronomy, astrophysics and Panchanga computation platform.",
+  "icons": []
+}
