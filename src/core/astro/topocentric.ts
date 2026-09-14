@@ -1,33 +1,35 @@
 import { eclipticToEquatorial } from './frames';
 import { julianDate, moonEclipticPosition, sunEclipticLongitude } from './ephemeris';
 
-const DEG = Math.PI / 180;
-
 export interface ObserverSite {
   latitudeDeg: number;
   longitudeDeg: number;
   elevationMeters?: number;
 }
 
-export interface TopocentricEquatorial {
+export interface ObserverEquatorialBaseline {
   rightAscensionDeg: number;
   declinationDeg: number;
   distanceAU: number;
   accuracy: 'approximate';
+  geometry: 'geocentric-baseline-with-observer-context';
 }
 
 export type ObservableBody = 'Sun' | 'Moon';
 
 /**
- * First-order observer geometry boundary. This is intentionally approximate;
- * production astrometry needs Earth orientation, geodetic/geocentric conversion,
- * parallax/refraction policy, and a validated high-precision ephemeris provider.
+ * Approximate geocentric equatorial baseline with explicit observer context.
+ *
+ * This function intentionally does NOT claim topocentric parallax correction.
+ * A production topocentric implementation needs Earth orientation, a validated
+ * observer geodetic/geocentric model, parallax, refraction policy, and a
+ * high-precision ephemeris provider.
  */
-export function approximateTopocentric(
+export function approximateObserverEquatorial(
   body: ObservableBody,
   date: Date,
   observer: ObserverSite,
-): TopocentricEquatorial {
+): ObserverEquatorialBaseline {
   if (observer.latitudeDeg < -90 || observer.latitudeDeg > 90) {
     throw new RangeError('observer latitude must be within [-90, 90] degrees');
   }
@@ -36,16 +38,19 @@ export function approximateTopocentric(
   }
 
   const jd = julianDate(date);
-  const longitude = body === 'Sun' ? sunEclipticLongitude(jd) : moonEclipticPosition(jd).longitudeDeg;
-  const latitude = body === 'Sun' ? 0 : moonEclipticPosition(jd).latitudeDeg;
-  const distanceAU = body === 'Sun' ? 1 : moonEclipticPosition(jd).distanceAU;
+  const moon = body === 'Moon' ? moonEclipticPosition(jd) : null;
+  const longitude = body === 'Sun' ? sunEclipticLongitude(jd) : moon!.longitudeDeg;
+  const latitude = body === 'Sun' ? 0 : moon!.latitudeDeg;
+  const distanceAU = body === 'Sun' ? 1 : moon!.distanceAU;
   const equatorial = eclipticToEquatorial(longitude, latitude, jd);
 
-  // This layer records observer context but deliberately avoids claiming a
-  // full Earth-rotation/parallax solution. The returned coordinates therefore
-  // remain geocentric-equatorial approximations pending the precision provider.
-  void observer.longitudeDeg;
-  void observer.latitudeDeg;
+  // Observer parameters are validated and carried as call context, but are
+  // deliberately not applied to the apparent coordinates in this baseline.
   void observer.elevationMeters;
-  return { ...equatorial, distanceAU, accuracy: 'approximate' };
+  return {
+    ...equatorial,
+    distanceAU,
+    accuracy: 'approximate',
+    geometry: 'geocentric-baseline-with-observer-context',
+  };
 }
