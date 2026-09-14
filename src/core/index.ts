@@ -10,6 +10,7 @@ export * from './astro/benchmark';
 export * from './astro/planetary';
 export * from './astro/eclipse';
 export * from './astro/quality';
+export * from './astro/evidence-contract';
 export * from './astro/validation';
 export * from './astro/validation-matrix';
 export * from './astro/invariants';
