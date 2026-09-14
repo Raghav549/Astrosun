@@ -23,7 +23,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund
 
       - name: Typecheck
         run: npm run typecheck
@@ -31,5 +31,5 @@ jobs:
       - name: Scientific core invariants
         run: npm run scientific:check
 
-      - name: Build
+      - name: Production build
         run: npm run build
