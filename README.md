@@ -1,6 +1,6 @@
 # Astrosun
 
-Astrosun is a research-oriented astronomy, astrophysics and Indian calendrical computation platform.
+Astrosun is a research-oriented astronomy, astrophysics, celestial-mechanics, astrodynamics and Indian calendrical computation platform.
 
 ## Scientific contract
 
@@ -8,20 +8,23 @@ Astrosun separates **approximate analytical models** from **validated/high-preci
 
 ## Core layers
 
-- Solar/lunar and Solar-System ephemerides through a provider interface.
+- Solar/lunar and Solar-System ephemerides through replaceable provider contracts.
+- Provider-grade Cartesian state contracts with explicit frame/time-scale/accuracy metadata.
 - Explicit astronomical time-scale boundaries: UTC, TAI, TT, TDB, TCB and TCL.
 - Coordinate/frame transforms and angular primitives.
-- Event solving with coarse bracketing plus numerical refinement.
+- Reusable event bracketing and bracketed root solving.
 - Panchanga primitives: Tithi, Nakshatra/Pada, Yoga and Karana.
 - Tropical/sidereal boundary with a replaceable ayanamsa provider.
-- Reproducible validation records against named reference ephemerides.
-- Provenance/evidence metadata for computational and traditional outputs.
+- Reproducible validation and benchmark reporting against named reference ephemerides.
+- Newtonian N-body, RK4 and velocity-Verlet propagation substrates with pluggable acceleration models.
+- Astrophysics formula primitives with explicit SI constants.
+- Provenance/evidence metadata and a research-to-architecture literature map.
 
 ## Research direction
 
 The target architecture is intentionally broader than a calendar application: observational astronomy, celestial mechanics, astrodynamics, Solar-System dynamics, eclipses and sky events, stellar/galactic/relativistic astrophysics, cosmology, scientific data analysis, research-paper retrieval, evidence-aware AI reasoning, and educational workflows.
 
-Research discovery is informed by current literature, including work on validated lightweight Solar-System calculations, high-precision lunar time ephemerides, modern astrodynamics libraries, ephemeris sourcing, and long-lived scientific software.
+Recent research used to shape the architecture includes jorbit's high-precision Solar-System approach (JPL DE ephemerides, modular accelerations and high-order numerical integration), Brahe's explicit time/reference-frame and propagation design, and modern ephemeris sourcing/astrodynamics tooling. These papers inform interfaces and validation priorities; they are not treated as runtime authority.
 
 ## Production rules
 
@@ -30,7 +33,8 @@ Research discovery is informed by current literature, including work on validate
 3. Unsupported time-scale conversions must fail explicitly until an authoritative provider/table is installed.
 4. High-precision claims require a reproducible benchmark against a named reference.
 5. Scientific calculations remain deterministic for the same declared inputs, provider and version.
-6. Render/deployment configuration is not part of the scientific source of truth; the GitHub repository is the source of truth for the computational core.
+6. A candidate eclipse is not a confirmed eclipse until shadow geometry and observer visibility are solved with adequate data.
+7. Render/deployment configuration is not part of the scientific source of truth; the GitHub repository is the source of truth for the computational core.
 
 ## Development sequence
 
