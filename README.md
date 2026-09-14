@@ -8,23 +8,24 @@ Astrosun separates **approximate analytical models** from **validated/high-preci
 
 ## Core layers
 
-- Solar/lunar and Solar-System ephemerides through replaceable provider contracts.
-- Provider-grade Cartesian state contracts with explicit frame/time-scale/accuracy metadata.
-- Explicit astronomical time-scale boundaries: UTC, TAI, TT, TDB, TCB and TCL.
-- Coordinate/frame transforms and angular primitives.
-- Reusable event bracketing and bracketed root solving.
-- Panchanga primitives: Tithi, Nakshatra/Pada, Yoga and Karana.
+- Replaceable Solar/lunar and Solar-System ephemeris providers, including an external DE/SPICE/CALCEPH kernel boundary.
+- Provider-grade Cartesian state contracts with explicit frame/time-scale/accuracy metadata and kernel coverage/integrity checks.
+- Explicit astronomical time-scale boundaries: UTC, TAI, TT, TDB, TCB and TCL, with Earth-orientation and relativistic body-time research boundaries.
+- Coordinate/frame transforms, observer geometry, sidereal time, atmospheric refraction and apparent-disk policy.
+- Sunrise, sunset, moonrise and moonset provider contracts with bracketed event solvers.
+- Eclipse phase candidates plus apparent solar disk/contact geometry; global path calculation remains provider/data dependent.
+- Panchanga primitives: Tithi, Nakshatra/Pada, Yoga and Karana, plus location/time-zone/day-boundary and declared regional policy contracts.
 - Tropical/sidereal boundary with a replaceable ayanamsa provider.
-- Reproducible validation and benchmark reporting against named reference ephemerides.
-- Newtonian N-body, RK4 and velocity-Verlet propagation substrates with pluggable acceleration models.
-- Astrophysics formula primitives with explicit SI constants.
-- Provenance/evidence metadata and a research-to-architecture literature map.
+- Reproducible validation, uncertainty/covariance primitives and benchmark acceptance gates against named reference ephemerides.
+- Newtonian N-body, RK4 and velocity-Verlet propagation substrates plus a unified state-propagation contract.
+- Astrophysics formula primitives, relativistic compact-object relations and numerical flat-LambdaCDM age/lookback calculations.
+- Provenance/evidence metadata, evidence graph and research-to-architecture literature map.
 
 ## Research direction
 
 The target architecture is intentionally broader than a calendar application: observational astronomy, celestial mechanics, astrodynamics, Solar-System dynamics, eclipses and sky events, stellar/galactic/relativistic astrophysics, cosmology, scientific data analysis, research-paper retrieval, evidence-aware AI reasoning, and educational workflows.
 
-Recent research used to shape the architecture includes jorbit's high-precision Solar-System approach (JPL DE ephemerides, modular accelerations and high-order numerical integration), Brahe's explicit time/reference-frame and propagation design, and modern ephemeris sourcing/astrodynamics tooling. These papers inform interfaces and validation priorities; they are not treated as runtime authority.
+Current architecture work is informed by jorbit's JPL-DE/Chebyshev/high-precision approach, Brahe's explicit time/reference-frame and propagation design, validated lightweight DE440 comparisons, and TEMPUS's ephemeris-consistent body-centered time-scale architecture. These papers inform interfaces and validation priorities; they are not treated as runtime authority.
 
 ## Production rules
 
@@ -33,15 +34,7 @@ Recent research used to shape the architecture includes jorbit's high-precision 
 3. Unsupported time-scale conversions must fail explicitly until an authoritative provider/table is installed.
 4. High-precision claims require a reproducible benchmark against a named reference.
 5. Scientific calculations remain deterministic for the same declared inputs, provider and version.
-6. A candidate eclipse is not a confirmed eclipse until shadow geometry and observer visibility are solved with adequate data.
-7. Render/deployment configuration is not part of the scientific source of truth; the GitHub repository is the source of truth for the computational core.
-
-## Development sequence
-
-1. Provider-grade ephemerides and authoritative reference data.
-2. Full Panchanga rule engine with location/time-zone/day-boundary handling.
-3. Planetary positions, topocentric observers, rise/set and eclipse solvers.
-4. Celestial mechanics and astrodynamics simulation primitives.
-5. Astrophysics modules and research datasets.
-6. Evidence graph, paper retrieval and scientific AI reasoning.
-7. End-to-end validation, tests, reproducibility artifacts and production UI integration.
+6. A candidate eclipse is not a confirmed eclipse until limb/shadow geometry and observer visibility are solved with adequate ephemeris and Earth-orientation data.
+7. Regional Panchanga conventions must be explicitly versioned; the engine must not silently mix month, sunrise and festival rules.
+8. External DE/SPICE/CALCEPH kernels are data dependencies, not invented source code; kernel identity, checksum and coverage must be declared.
+9. Render/deployment configuration is not part of the scientific source of truth; the GitHub repository is the source of truth for the computational core.
