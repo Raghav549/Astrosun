@@ -5,6 +5,7 @@ export * from './astro/angles';
 export * from './astro/provider';
 export * from './astro/quality';
 export * from './astro/validation';
+export * from './astro/validation-matrix';
 export * from './astro/invariants';
 export * from './astro/observer';
 export * from './astro/topocentric';
