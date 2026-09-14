@@ -20,6 +20,7 @@ export * from './astro/rise-set';
 export * from './dynamics/state';
 export * from './dynamics/kepler';
 export * from './dynamics/nbody';
+export * from './dynamics/integrators';
 export * from './dynamics/invariants';
 export * from './physics/constants';
 export * from './research/evidence';
