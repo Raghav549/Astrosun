@@ -3,6 +3,7 @@ export * from './astro/events';
 export * from './astro/frames';
 export * from './astro/quality';
 export * from './astro/validation';
+export * from './time/scales';
 export * from './panchanga/ayanamsa';
 export * from './panchanga/types';
 export * from './panchanga/engine';
