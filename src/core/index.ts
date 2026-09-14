@@ -23,3 +23,4 @@ export * from './panchanga/ayanamsa';
 export * from './panchanga/rules';
 export * from './panchanga/types';
 export * from './panchanga/engine';
+export * from './runtime';
