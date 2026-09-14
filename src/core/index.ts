@@ -23,6 +23,7 @@ export * from './dynamics/nbody';
 export * from './dynamics/integrators';
 export * from './dynamics/invariants';
 export * from './physics/constants';
+export * from './physics/astro-formulas';
 export * from './research/evidence';
 export * from './time/scales';
 export * from './panchanga/ayanamsa';
