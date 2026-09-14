@@ -1,11 +1,27 @@
-/** Deterministic low-precision solar/lunar ephemeris primitives.
+/**
+ * Deterministic solar/lunar ephemeris primitives.
  *
- * This module deliberately exposes the approximation level. It is suitable for
- * UI/event discovery and baseline tests, not as a replacement for JPL DE/SPICE.
- * Production high-precision providers should implement the same interface.
+ * Accuracy is explicit: this file is an approximate fallback provider.
+ * High-precision providers can implement the same result shape and replace it
+ * without changing callers.
  */
 export type CelestialBody = 'Sun' | 'Moon';
-export interface EclipticPosition { body: CelestialBody; jd: number; longitudeDeg: number; latitudeDeg: number; distanceAU: number; accuracy: 'approximate'; }
+export type EphemerisAccuracy = 'approximate';
+
+export interface EclipticPosition {
+  body: CelestialBody;
+  jd: number;
+  longitudeDeg: number;
+  latitudeDeg: number;
+  distanceAU: number;
+  accuracy: EphemerisAccuracy;
+}
+
+export interface EphemerisProvider {
+  name: string;
+  accuracy: string;
+  position(body: CelestialBody, date: Date): EclipticPosition;
+}
 
 const RAD = Math.PI / 180;
 const norm = (x: number) => ((x % 360) + 360) % 360;
@@ -15,7 +31,10 @@ export function julianDate(date: Date): number {
   return date.getTime() / 86400000 + 2440587.5;
 }
 
-/** Approximate apparent geocentric solar ecliptic longitude. */
+/**
+ * Approximate apparent geocentric solar ecliptic longitude.
+ * Intended as a deterministic baseline, not a sub-arcsecond ephemeris.
+ */
 export function sunEclipticLongitude(jd: number): number {
   const n = jd - 2451545.0;
   const L = norm(280.460 + 0.9856474 * n);
@@ -40,14 +59,25 @@ export function moonEclipticPosition(jd: number): Omit<EclipticPosition, 'body' 
   const xh = r * (Math.cos(N) * Math.cos(v + w) - Math.sin(N) * Math.sin(v + w) * Math.cos(i));
   const yh = r * (Math.sin(N) * Math.cos(v + w) + Math.cos(N) * Math.sin(v + w) * Math.cos(i));
   const zh = r * Math.sin(v + w) * Math.sin(i);
-  return { longitudeDeg: norm(Math.atan2(yh, xh) / RAD), latitudeDeg: Math.atan2(zh, Math.hypot(xh, yh)) / RAD, distanceAU: r * 6378.14 / 149597870.7 };
+  return {
+    longitudeDeg: norm(Math.atan2(yh, xh) / RAD),
+    latitudeDeg: Math.atan2(zh, Math.hypot(xh, yh)) / RAD,
+    distanceAU: (r * 6378.14) / 149597870.7,
+  };
 }
 
-export function eclipticPositions(date: Date): EclipticPosition[] {
-  const jd = julianDate(date);
-  const moon = moonEclipticPosition(jd);
-  return [
-    { body: 'Sun', jd, longitudeDeg: sunEclipticLongitude(jd), latitudeDeg: 0, distanceAU: 1, accuracy: 'approximate' },
-    { body: 'Moon', jd, ...moon, accuracy: 'approximate' },
-  ];
+export const approximateEphemerisProvider: EphemerisProvider = {
+  name: 'astrosun-analytical-baseline',
+  accuracy: 'approximate',
+  position(body, date) {
+    const jd = julianDate(date);
+    if (body === 'Sun') {
+      return { body, jd, longitudeDeg: sunEclipticLongitude(jd), latitudeDeg: 0, distanceAU: 1, accuracy: 'approximate' };
+    }
+    return { body, jd, ...moonEclipticPosition(jd), accuracy: 'approximate' };
+  },
+};
+
+export function eclipticPositions(date: Date, provider: EphemerisProvider = approximateEphemerisProvider): EclipticPosition[] {
+  return [provider.position('Sun', date), provider.position('Moon', date)];
 }
