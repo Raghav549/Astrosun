@@ -18,10 +18,15 @@ export interface EclipseCandidate {
  */
 export function eclipseCandidate(date: Date, thresholdDeg = 1.5): EclipseCandidate | null {
   const positions = eclipticPositions(date);
-  const phase = angularDistance(positions.moon.longitudeDeg, positions.sun.longitudeDeg);
+  const sun = positions.find((position) => position.body === 'Sun');
+  const moon = positions.find((position) => position.body === 'Moon');
+  if (!sun || !moon) throw new Error('Ephemeris must provide both Sun and Moon positions.');
+
+  const phase = angularDistance(moon.longitudeDeg, sun.longitudeDeg);
   const distanceFromNew = phase;
   const distanceFromFull = Math.abs(180 - phase);
   if (Math.min(distanceFromNew, distanceFromFull) > thresholdDeg) return null;
+
   const kind: EclipseKind = distanceFromNew <= distanceFromFull ? 'solar-candidate' : 'lunar-candidate';
   return {
     kind,
