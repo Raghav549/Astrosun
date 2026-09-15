@@ -35,5 +35,8 @@ jobs:
       - name: Scientific core invariants
         run: npm run scientific:check
 
+      - name: Deployment sanity
+        run: npm run deploy:check
+
       - name: Production build
         run: npm run build
