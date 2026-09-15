@@ -1,10 +1,15 @@
 services:
   - type: web
     name: astrosun
-    runtime: node
+    runtime: static
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: node server/router.mjs
+    staticPublishPath: ./dist
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: NVIDIA_NIM_API_KEY
         sync: false
