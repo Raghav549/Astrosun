@@ -17,14 +17,24 @@ export interface RegionalPanchangaPolicy {
 
 export const REGIONAL_PANCHANGA_POLICIES: readonly RegionalPanchangaPolicy[] = [
   {
-    id: 'north-indian-generic',
-    name: 'North Indian Amanta/Purnimanta policy placeholder',
+    id: 'north-india',
+    name: 'North Indian sunrise-day policy (generic)',
     region: 'North India',
     monthSystem: 'purnimanta',
     dayBoundary: 'sunrise',
     festivalDayRule: 'sunrise-day',
     ayanamsa: 'Lahiri',
-    notes: ['Exact festival observance may still depend on local sampradaya and authority.'],
+    notes: ['Declared computational baseline; exact festival observance may depend on local sampradaya and authority.'],
+  },
+  {
+    id: 'north-indian-generic',
+    name: 'North Indian Amanta/Purnimanta policy',
+    region: 'North India',
+    monthSystem: 'purnimanta',
+    dayBoundary: 'sunrise',
+    festivalDayRule: 'sunrise-day',
+    ayanamsa: 'Lahiri',
+    notes: ['Alias retained for backwards compatibility; exact festival observance may still depend on local sampradaya and authority.'],
   },
   {
     id: 'maharashtra-generic',
@@ -56,7 +66,7 @@ export function getRegionalPolicy(id: string): RegionalPanchangaPolicy {
 
 export function validateRegionalContext(policy: RegionalPanchangaPolicy, location: PanchangaLocation): void {
   if (!location.timeZone) throw new Error('Regional Panchanga requires an IANA time zone.');
-  if (policy.region === 'India' && (location.latitudeDeg < 6 || location.latitudeDeg > 38 || location.longitudeDeg < 68 || location.longitudeDeg > 98)) {
+  if ((policy.id === 'generic-amanta' || policy.id === 'north-india' || policy.id === 'north-indian-generic') && (location.latitudeDeg < 6 || location.latitudeDeg > 38 || location.longitudeDeg < 68 || location.longitudeDeg > 98)) {
     throw new RangeError(`Location ${location.latitudeDeg},${location.longitudeDeg} is outside the declared India policy envelope.`);
   }
 }
