@@ -1,0 +1,11 @@
+import fs from'node:fs';
+const root=new URL('../src/',import.meta.url);const read=f=>fs.readFileSync(new URL(f,root),'utf8');
+const entry=read('main-production.jsx');const palm=read('ui/jyotisha-advanced.jsx');const panchanga=read('ui/panchanga-calendar.jsx');const ai=read('ui/ai-input.jsx');const shell=read('ui/production-shell.jsx');
+if(!entry.includes("['en','hi','bn','mr','ta','te','kn','ml','gu']"))throw Error('Nine-language entry registry missing');
+if(!palm.includes("document.createElement('img')"))throw Error('Palm upload must use browser-safe image element');
+if(palm.includes('new Image()'))throw Error('Broken global Image constructor remains');
+if(!panchanga.includes('PanchangaCalendar'))throw Error('Digital Panchanga calendar missing');
+if(!ai.includes('FileReader'))throw Error('Multimodal image reader missing');
+if(!ai.includes('MediaRecorder'))throw Error('Microphone capture missing');
+if(!shell.includes("tr(lang,'chooseLanguage')"))throw Error('Language gate is not localized');
+console.log('Manual production checks: PASS');
