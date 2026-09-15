@@ -15,7 +15,6 @@ export function angularDistance(a: number, b: number): number {
   return Math.abs(signedDegrees(a - b));
 }
 
-/** Compatibility alias used by the eclipse candidate engine. */
 export function angularSeparationDeg(a: number, b: number): number {
   return angularDistance(a, b);
 }
@@ -24,7 +23,6 @@ export function angularSeparationArcsec(a: number, b: number): number {
   return angularDistance(a, b) * 3600;
 }
 
-/** Linear interpolation on a circular angle domain. */
 export function interpolateAngle(a: number, b: number, fraction: number): number {
   return normalizeDegrees(a + signedDegrees(b - a) * fraction);
 }
