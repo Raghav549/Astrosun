@@ -19,10 +19,6 @@ export function angularSeparationDeg(a: number, b: number): number {
   return angularDistance(a, b);
 }
 
-export function angularSeparationArcsec(a: number, b: number): number {
-  return angularDistance(a, b) * 3600;
-}
-
 export function interpolateAngle(a: number, b: number, fraction: number): number {
   return normalizeDegrees(a + signedDegrees(b - a) * fraction);
 }
