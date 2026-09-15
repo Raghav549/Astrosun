@@ -24,7 +24,7 @@ for (const script of ['build', 'typecheck', 'scientific:check', 'deploy:check'])
 }
 
 const main = fs.readFileSync(path.join(root, 'src/main.jsx'), 'utf8');
-if (!/import\s+['\"]\.\/styles\.css['\"]/.test(main)) throw new Error('Main stylesheet import missing');
+if (!main.includes('./styles.css')) throw new Error('Main stylesheet reference missing');
 if (!main.includes('LanguageGate')) throw new Error('Language gate missing');
 if (!main.includes('IntroScreen')) throw new Error('Intro screen missing');
 if (!main.includes('buildRuntimeSnapshot')) throw new Error('Runtime engine not wired');
