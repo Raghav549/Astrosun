@@ -1,4 +1,4 @@
-import { angularSeparationDeg } from './angles';
+import { angularDistance } from './angles';
 import { eclipticPositions } from './ephemeris';
 
 export type EclipseKind = 'solar-candidate' | 'lunar-candidate';
@@ -18,10 +18,15 @@ export interface EclipseCandidate {
  */
 export function eclipseCandidate(date: Date, thresholdDeg = 1.5): EclipseCandidate | null {
   const positions = eclipticPositions(date);
-  const raw = ((positions.moon.longitudeDeg - positions.sun.longitudeDeg) % 360 + 360) % 360;
-  const distanceFromNew = angularSeparationDeg(positions.sun.longitudeDeg, positions.moon.longitudeDeg);
-  const distanceFromFull = Math.abs(raw - 180);
+  const phase = angularDistance(positions.moon.longitudeDeg, positions.sun.longitudeDeg);
+  const distanceFromNew = phase;
+  const distanceFromFull = Math.abs(180 - phase);
   if (Math.min(distanceFromNew, distanceFromFull) > thresholdDeg) return null;
   const kind: EclipseKind = distanceFromNew <= distanceFromFull ? 'solar-candidate' : 'lunar-candidate';
-  return { kind, date: new Date(date), phaseSeparationDeg: kind === 'solar-candidate' ? distanceFromNew : distanceFromFull, accuracy: 'approximate' };
+  return {
+    kind,
+    date: new Date(date),
+    phaseSeparationDeg: kind === 'solar-candidate' ? distanceFromNew : distanceFromFull,
+    accuracy: 'approximate',
+  };
 }
