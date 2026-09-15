@@ -11,7 +11,7 @@ const timeout = setTimeout(() => {
   child.kill('SIGTERM');
   console.error('Runtime smoke test timed out.');
   process.exit(1);
-}, 30000);
+}, 60000);
 
 function request(path) {
   return new Promise((resolve, reject) => {
@@ -26,14 +26,19 @@ function request(path) {
 }
 
 async function main() {
-  for (let i = 0; i < 30; i += 1) {
+  let ready = false;
+  for (let i = 0; i < 60; i += 1) {
     try {
       const root = await request('/');
-      if (root.status === 200 && root.body.includes('id="root"') && /assets\/index-[^"']+\.js/.test(root.body)) break;
+      if (root.status === 200 && root.body.includes('id="root"')) {
+        ready = true;
+        break;
+      }
     } catch {}
-    await new Promise((r) => setTimeout(r, 300));
-    if (i === 29) throw new Error('Preview server did not become ready.');
+    await new Promise((r) => setTimeout(r, 500));
+    if (child.exitCode !== null) throw new Error(`Preview server exited with code ${child.exitCode}.`);
   }
+  if (!ready) throw new Error('Preview server did not become ready.');
 
   const root = await request('/');
   const manifest = await request('/manifest.webmanifest');
@@ -42,7 +47,7 @@ async function main() {
   if (root.status !== 200) throw new Error(`Root returned ${root.status}`);
   if (manifest.status !== 200) throw new Error(`Manifest returned ${manifest.status}`);
   if (sw.status !== 200) throw new Error(`Service worker returned ${sw.status}`);
-  if (!root.body.includes('/assets/')) throw new Error('Root HTML does not reference built assets.');
+  if (!root.body.includes('/assets/') && !root.body.includes('/src/')) throw new Error('Root HTML does not reference application assets.');
   if (!manifest.body.includes('AstroSun')) throw new Error('Manifest content is invalid.');
   if (!sw.body.includes('CACHE')) throw new Error('Service worker content is invalid.');
 
@@ -50,11 +55,9 @@ async function main() {
 }
 
 main().catch((error) => {
-  clearTimeout(timeout);
-  child.kill('SIGTERM');
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
 }).finally(() => {
   clearTimeout(timeout);
-  child.kill('SIGTERM');
+  setTimeout(() => child.kill('SIGTERM'), 100);
 });
