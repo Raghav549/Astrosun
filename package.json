@@ -10,6 +10,7 @@
     "scientific:check": "node --import tsx ./scripts/scientific-check.ts",
     "deploy:check": "node ./scripts/deploy-sanity.mjs",
     "runtime:smoke": "node ./scripts/runtime-smoke.mjs",
+    "client:smoke": "node ./scripts/client-smoke.mjs",
     "preview": "vite preview",
     "start": "vite --host 0.0.0.0"
   },
