@@ -1,8 +1,7 @@
 import http from'node:http';
 import{Pool}from'pg';
 import*as store from'../api/db-adapter.mjs';
-import{chatWithProviders}from'../src/core/ai/provider-adapter.ts';
-import{providerStatus}from'../src/core/astro/provider-endpoints.ts';
+import{chatWithProviders,providerStatus}from'./provider-runtime.mjs';
 const port=Number(process.env.PORT||10000);
 const databaseUrl=process.env.DATABASE_URL;
 const useDb=Boolean(databaseUrl&&databaseUrl!=='${ASTROSUN_DATABASE_URL}'&&!databaseUrl.includes('base'));
@@ -23,6 +22,6 @@ if(u.pathname==='/api/history'&&req.method==='POST'){const b=await json(req);con
 if(u.pathname==='/api/history'&&req.method==='GET'){const id=req.headers['x-astrosun-user']?.toString()||u.searchParams.get('userId')||'local-user';return send(req,res,200,{history:await getHistory(id,u.searchParams.get('feature'))})}
 if(u.pathname==='/api/research/sources'&&req.method==='GET')return send(req,res,200,{sources:[{source_id:'2606.27055',title:'Solar-system positions and events',url:'https://alphaxiv.org/abs/2606.27055',provider:'alphaXiv'},{source_id:'2609.08979',title:'Relativistic coordinate time scales',url:'https://alphaxiv.org/abs/2609.08979',provider:'alphaXiv'},{source_id:'2601.06452',title:'Modern astrodynamics library',url:'https://alphaxiv.org/abs/2601.06452',provider:'alphaXiv'},{source_id:'2608.19413',title:'Scientific visualization infrastructure',url:'https://alphaxiv.org/abs/2608.19413',provider:'alphaXiv'}]});
 if(u.pathname==='/api/ai/chat'&&req.method==='POST'){const b=await json(req);const messages=Array.isArray(b.messages)?b.messages.map((m)=>({role:['system','user','assistant'].includes(m?.role)?m.role:'user',content:String(m?.content||'')})):[];if(!messages.length)throw Error('messages required');const result=await chatWithProviders(messages,process.env,b.context&&typeof b.context==='object'?b.context:{});return send(req,res,200,result)}
-if(u.pathname==='/api/providers'&&req.method==='GET')return send(req,res,200,{providers:providerStatus(process.env).map(p=>({id:p.id,label:p.label,baseUrl:p.baseUrl,enabled:p.enabled,description:p.description}))});
+if(u.pathname==='/api/providers'&&req.method==='GET')return send(req,res,200,{providers:providerStatus(process.env).map(p=>({id:p.id,label:p.label,baseUrl:p.baseUrl,enabled:p.enabled,model:p.model||'',description:'Configured through Render environment variables'}))});
 return send(req,res,404,{ok:false,error:'Not found'})}catch(e){return send(req,res,500,{ok:false,error:e instanceof Error?e.message:String(e)})}}
 migrate().then(()=>http.createServer(handler).listen(port,'0.0.0.0',()=>console.log(`AstroSun API listening on ${port}; persistence=${pool?'postgres':'render-safe-store'}`))).catch(e=>{console.error('AstroSun API startup failed',e);process.exit(1)})
