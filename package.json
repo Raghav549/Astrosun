@@ -12,6 +12,7 @@
     "runtime:smoke": "node ./scripts/runtime-smoke.mjs",
     "client:smoke": "node ./scripts/client-smoke.mjs",
     "feature:audit": "node ./scripts/feature-route-audit.mjs",
+    "server:start": "node server/index.mjs",
     "preview": "vite preview",
     "start": "vite --host 0.0.0.0"
   },
@@ -22,7 +23,8 @@
     "react": "latest",
     "react-dom": "latest",
     "lucide-react": "latest",
-    "tsx": "latest"
+    "tsx": "latest",
+    "pg": "latest"
   },
   "devDependencies": {}
 }
