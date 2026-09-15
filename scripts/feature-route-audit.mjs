@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 const root=new URL('../src/',import.meta.url);
-const files=['main-production.jsx','ui/jyotisha-advanced.jsx','ui/jyotisha-focused.jsx','core/panchanga/jyotisha.ts','core/jyotisha/workspace-engine.ts'];
+const files=['main-production.jsx','ui/jyotisha-advanced.jsx','ui/jyotisha-focused.jsx','ui/production-shell.jsx','ui/production-pages.jsx','core/panchanga/jyotisha.ts','core/jyotisha/workspace-engine.ts'];
 const source=files.map(f=>fs.readFileSync(new URL(f,root),'utf8')).join('\n');
 const requiredRoutes=['home','language','panchanga','patra','sky','astrophysics','research','settings','kundli','graha','bhava','nakshatra','dasha','transits','muhurta','vivah','rituals','gemstones','palm','evidence','ephemeris','dynamics','eclipse','observer','time','uncertainty','benchmarks','library'];
 const missing=requiredRoutes.filter(id=>!source.includes("'"+id+"'"));
@@ -11,4 +11,4 @@ for(const token of ['chart.planets','chart.ascendant','chart.moon','chart.sun','
 for(const token of ['2,3,5,7,10,11,13','Ashwini','Rohini','Pushya','Uttara Phalguni','Revati'])if(!source.includes(token))throw new Error('Missing declared muhurta rule data: '+token);
 if(source.includes('scientific-placeholder'))throw new Error('Placeholder CSS/class leaked into production source');
 if(source.includes('Unknown Panchanga policy'))throw new Error('Generic unknown-policy handling leaked into production source');
-console.log('Feature route audit: PASS ('+requiredRoutes.length+' routes; dedicated Jyotisha workspaces + calculated Navagraha layer present)');
+console.log('Feature route audit: PASS ('+requiredRoutes.length+' routes; dedicated Jyotisha workspaces + astronomy registry + calculated Navagraha layer present)');
