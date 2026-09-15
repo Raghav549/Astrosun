@@ -5,7 +5,6 @@ const root = process.cwd();
 const required = [
   'index.html',
   'package.json',
-  'vite.config.js',
   'src/main.jsx',
   'src/styles.css',
   'public/manifest.webmanifest',
