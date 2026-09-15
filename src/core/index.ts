@@ -28,7 +28,6 @@ export * from './astro/validation-matrix';
 export * from './astro/uncertainty';
 export * from './astro/invariants';
 export * from './astro/topocentric';
-export * from './astro/horizons';
 export * from './astro/rise-set';
 export * from './astro/rise-set-geometry';
 export * from './dynamics/state';
