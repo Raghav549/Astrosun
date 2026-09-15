@@ -17,6 +17,6 @@ const swText = fs.readFileSync(sw,'utf8');
 if (!html.includes('id="root"')) throw new Error('Built HTML has no React root.');
 if (!html.includes('/src/main.jsx') && !html.includes('/assets/')) throw new Error('Built HTML has no application script reference.');
 if (!html.includes('/src/boot.css') && !html.includes('/assets/')) throw new Error('Built HTML has no boot stylesheet reference.');
-if (!manifestText.includes('AstroSun')) throw new Error('Built manifest is invalid.');
+if (!manifestText.includes('AstroSun') && !manifestText.includes('ऐस्ट्रोसुन')) throw new Error('Built manifest is invalid.');
 if (!swText.includes('astrosun-v4')) throw new Error('Built service worker cache version is stale.');
 console.log('AstroSun built client smoke: PASS');
