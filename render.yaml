@@ -19,3 +19,19 @@ services:
         value: https://integrate.api.nvidia.com/v1
       - key: AIHUBMIX_BASE_URL
         value: https://aihubmix.com/v1
+  - type: web
+    name: astrosun-api
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install
+    startCommand: npm run server:start
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: drustpoll-db
+          property: connectionString
+
+databases: []
