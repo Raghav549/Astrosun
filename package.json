@@ -11,6 +11,7 @@
     "deploy:check": "node ./scripts/deploy-sanity.mjs",
     "runtime:smoke": "node ./scripts/runtime-smoke.mjs",
     "client:smoke": "node ./scripts/client-smoke.mjs",
+    "feature:audit": "node ./scripts/feature-route-audit.mjs",
     "preview": "vite preview",
     "start": "vite --host 0.0.0.0"
   },
