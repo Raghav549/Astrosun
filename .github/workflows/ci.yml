@@ -35,8 +35,17 @@ jobs:
       - name: Scientific core invariants
         run: npm run scientific:check
 
+      - name: Feature route audit
+        run: npm run feature:audit
+
+      - name: Runtime smoke
+        run: npm run runtime:smoke
+
       - name: Deployment sanity
         run: npm run deploy:check
 
       - name: Production build
         run: npm run build
+
+      - name: Client smoke
+        run: npm run client:smoke
