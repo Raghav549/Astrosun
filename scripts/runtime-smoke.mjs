@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-
 const root=process.cwd();
 const dist=path.join(root,'dist');
 const files=['index.html','manifest.webmanifest','sw.js'];
-for(const file of files){const full=path.join(dist,file);if(!fs.existsSync(full))throw new Error(`Missing built runtime asset: ${path.relative(root,full)}`)}
+for(const file of files){const p=path.join(dist,file);if(!fs.existsSync(p))throw new Error(`Missing built runtime asset: ${path.relative(root,p)}`)}
 const html=fs.readFileSync(path.join(dist,'index.html'),'utf8');
 const manifest=fs.readFileSync(path.join(dist,'manifest.webmanifest'),'utf8');
 const sw=fs.readFileSync(path.join(dist,'sw.js'),'utf8');
