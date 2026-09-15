@@ -1,10 +1,12 @@
 import fs from 'node:fs';
 const root=new URL('../src/',import.meta.url);
-const files=['main-production2.jsx','ui/production-core.jsx','ui/production-shell.jsx','ui/production-pages.jsx'];
+const files=['main-production2.jsx','ui/production-core.jsx','ui/production-shell.jsx','ui/production-pages-safe.jsx'];
 const source=files.map(f=>fs.readFileSync(new URL(f,root),'utf8')).join('\n');
 const requiredRoutes=['home','language','panchanga','sky','astrophysics','research','settings','kundli','graha','bhava','nakshatra','dasha','transits','muhurta','vivah','rituals','gemstones','palm','evidence','ephemeris','dynamics','eclipse','observer','time','uncertainty','benchmarks','library'];
 const missing=requiredRoutes.filter(id=>!source.includes(`'${id}'`));
 if(missing.length)throw new Error(`Missing production routes: ${missing.join(', ')}`);
-for(const token of ['function PanchangaPage','function SkyPage','function JyotishaPage','function SettingsPage','function PalmPanel','function EvidencePanel','function ScientificPage','OrbitalScene','requestAnimationFrame','/api/profile','/api/history'])if(!source.includes(token))throw new Error(`Missing substantive production gate: ${token}`);
+for(const token of ['function PanchangaPage','function SkyPage','function JyotishaPage','function PalmPanel','function EvidencePanel','function ScientificPage','OrbitalScene','requestAnimationFrame','/api/profile','/api/history'])if(!source.includes(token))throw new Error(`Missing substantive production gate: ${token}`);
+for(const token of ['Tithi ${snap.tithi.number}','snap.sunLongitudeDeg','snap.moonLongitudeDeg','chart.sun','chart.moon','chart.ascendant'])if(!source.includes(token))throw new Error(`Missing corrected calculation field: ${token}`);
+if(source.includes('chart.planets')||source.includes('snap.tithi.name')||source.includes('snap.sun.longitudeDeg')||source.includes('snap.moon.longitudeDeg'))throw new Error('Stale chart/Panchanga shape assumptions remain in production source');
 if(source.includes('scientific-placeholder'))throw new Error('Placeholder CSS/class leaked into production source');
-console.log(`Feature route audit: PASS (${requiredRoutes.length} routes; modular production implementation present)`);
+console.log(`Feature route audit: PASS (${requiredRoutes.length} routes; runtime-safe calculation workspaces present)`);
