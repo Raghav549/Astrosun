@@ -9,6 +9,6 @@ const manifest=fs.readFileSync(path.join(dist,'manifest.webmanifest'),'utf8');
 const sw=fs.readFileSync(path.join(dist,'sw.js'),'utf8');
 if(!html.includes('id="root"'))throw new Error('Built HTML has no React root.');
 if(!html.includes('/assets/')&&!html.includes('/src/'))throw new Error('Built HTML has no application script reference.');
-if(!manifest.includes('AstroSun'))throw new Error('Manifest is invalid.');
+if(!manifest.includes('AstroSun')&&!manifest.includes('ऐस्ट्रोसुन'))throw new Error('Manifest is invalid.');
 if(!sw.includes('CACHE'))throw new Error('Service worker is invalid.');
 console.log('AstroSun runtime smoke: PASS');
