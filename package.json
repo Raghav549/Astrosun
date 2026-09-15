@@ -8,6 +8,7 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "scientific:check": "node --import tsx ./scripts/scientific-check.ts",
+    "deploy:check": "node ./scripts/deploy-sanity.mjs",
     "preview": "vite preview",
     "start": "vite --host 0.0.0.0"
   },
