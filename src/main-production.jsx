@@ -1,8 +1,45 @@
 import React,{useEffect,useState}from'react';
 import{createRoot}from'react-dom/client';
 import{buildRuntimeSnapshot}from'./core';
-import{Home,Panel,Stat,Field,Shell,LanguageGate,SettingsPage,tr,featureGroups,allFeatures,api}from'./ui/production-shell.jsx';
-import{PanchangaPage,SkyPage,JyotishaPage,ResearchPage,ScientificPage}from'./ui/production-pages.jsx';
+import{LanguageGate,SettingsPage,tr,Panel,Stat,Field,Shell,featureGroups,allFeatures,api}from'./ui/production-shell.jsx';
+import{SkyPage,ResearchPage,ScientificPage}from'./ui/production-pages.jsx';
+import{AdvancedHome,KundliPage,PatraPage,GemstonePage,PalmPage}from'./ui/jyotisha-advanced.jsx';
+import{GrahaPage,NakshatraPage,BhavaPage,DashaPage,TransitPage,VivahPage,RitualPage,EvidencePage}from'./ui/jyotisha-focused.jsx';
 import'./production.css';
-function App(){const saved=localStorage.getItem('astrosun-language')||'en';const[lang,setLang]=useState(saved);const[page,setPage]=useState(saved?'home':'language');const[runtime]=useState(()=>{try{return buildRuntimeSnapshot()}catch{return null}});const[profile,setProfile]=useState(null);useEffect(()=>{api('/api/profile').then(r=>{if(r.profile)setProfile({theme:r.profile.theme,unitSystem:r.profile.unit_system,location:{name:r.profile.location_name,latitudeDeg:r.profile.latitude_deg,longitudeDeg:r.profile.longitude_deg,timeZone:r.profile.time_zone},ruleSet:r.profile.rule_set,precisionProvider:r.profile.precision_provider})}).catch(()=>{})},[]);useEffect(()=>{document.documentElement.dataset.theme=profile?.theme||'system'},[profile?.theme]);const save=async x=>{try{await api('/api/history',{method:'POST',body:JSON.stringify(x)})}catch{localStorage.setItem(`astrosun-last-${x.feature}`,JSON.stringify(x.payload))}};if(!runtime)return <div className="language-gate"><div className="language-orb">✦</div><h1>ASTROSUN</h1><p>Loading calculated runtime…</p></div>;if(page==='language')return <LanguageGate lang={lang} setLang={setLang} onContinue={()=>{localStorage.setItem('astrosun-language',lang);setPage('home')}}/>;if(page==='home')return <Home lang={lang} setPage={setPage} runtime={runtime} profile={profile||{location:{name:'Patna'}}}/>;if(page==='panchanga')return <PanchangaPage lang={lang} tr={tr} Panel={Panel} Stat={Stat} Field={Field} Shell={Shell} profile={profile||undefined} onSave={save} onBack={()=>setPage('home')}/>;if(page==='sky')return <SkyPage Shell={Shell} Panel={Panel} workspaceAccuracy={{astronomy:'Approximate analytical baseline until a validated high-precision provider is injected.'}} onBack={()=>setPage('home')}/>;if(featureGroups.jyotisha.some(x=>x[0]===page))return <JyotishaPage id={page} Shell={Shell} Panel={Panel} Stat={Stat} Field={Field} profile={profile||undefined} onBack={()=>setPage('home')} onSave={save} allFeatures={allFeatures} lang={lang} tr={tr}/>;if(page==='research'||page==='library')return <ResearchPage Shell={Shell} Panel={Panel} onBack={()=>setPage('home')}/>;if(page==='settings')return <SettingsPage lang={lang} profile={profile||undefined} setProfile={setProfile} onBack={()=>setPage('home')} onLanguage={()=>setPage('language')} tr={tr}/>;if(featureGroups.astronomy.some(x=>x[0]===page))return <ScientificPage id={page} Shell={Shell} Panel={Panel} onBack={()=>setPage('home')}/>;return <Home lang={lang} setPage={setPage} runtime={runtime} profile={profile||{location:{name:'Patna'}}}/>}
+
+function App(){
+ const saved=localStorage.getItem('astrosun-language')||'en';
+ const[lang,setLang]=useState(saved);
+ const[stack,setStack]=useState(['home']);
+ const page=stack[stack.length-1];
+ const[runtime]=useState(()=>{try{return buildRuntimeSnapshot()}catch{return null}});
+ const[profile,setProfile]=useState(null);
+ useEffect(()=>{api('/api/profile').then(r=>{if(r.profile)setProfile({theme:r.profile.theme,unitSystem:r.profile.unit_system,location:{name:r.profile.location_name,latitudeDeg:r.profile.latitude_deg,longitudeDeg:r.profile.longitude_deg,timeZone:r.profile.time_zone},ruleSet:r.profile.rule_set,precisionProvider:r.profile.precision_provider})}).catch(()=>{})},[]);
+ useEffect(()=>{document.documentElement.dataset.theme=profile?.theme||'system'},[profile?.theme]);
+ const go=id=>setStack(s=>s[s.length-1]===id?s:[...s,id]);
+ const back=()=>setStack(s=>s.length>1?s.slice(0,-1):['home']);
+ const save=async x=>{try{await api('/api/history',{method:'POST',body:JSON.stringify(x)})}catch{localStorage.setItem(`astrosun-last-${x.feature}`,JSON.stringify(x.payload))}};
+ const ask=async q=>{try{await api('/api/history',{method:'POST',body:JSON.stringify({feature:`query:${page}`,payload:{question:q,page,createdAt:new Date().toISOString()}})})}catch{localStorage.setItem('astrosun-last-query',JSON.stringify({question:q,page}))}};
+ if(!runtime)return <div className="language-gate"><div className="language-orb">✦</div><h1>ASTROSUN</h1><p>Loading calculated runtime…</p></div>;
+ if(page==='language')return <LanguageGate lang={lang} setLang={setLang} onContinue={()=>{localStorage.setItem('astrosun-language',lang);back()}}/>;
+ if(page==='home')return <AdvancedHome profile={profile||{location:{name:'Patna'}}} onOpen={go} onAsk={ask}/>;
+ if(page==='kundli')return <KundliPage profile={profile||undefined} onBack={back} onSave={save} onAsk={ask}/>;
+ if(page==='panchanga'||page==='patra'||page==='muhurta')return <PatraPage profile={profile||undefined} onBack={back} onAsk={ask} onSave={save}/>;
+ if(page==='gemstones')return <GemstonePage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='palm')return <PalmPage onBack={back} onAsk={ask}/>;
+ if(page==='graha')return <GrahaPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='nakshatra')return <NakshatraPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='bhava')return <BhavaPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='dasha')return <DashaPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='transits')return <TransitPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='vivah')return <VivahPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='rituals')return <RitualPage profile={profile||undefined} onBack={back} onAsk={ask}/>;
+ if(page==='evidence')return <EvidencePage onBack={back} onAsk={ask}/>;
+ if(page==='sky')return <SkyPage Shell={Shell} Panel={Panel} workspaceAccuracy={{astronomy:'Approximate analytical baseline until a validated high-precision provider is injected.'}} onBack={back}/>;
+ if(page==='research'||page==='library')return <ResearchPage Shell={Shell} Panel={Panel} onBack={back}/>;
+ if(page==='settings')return <SettingsPage lang={lang} profile={profile||undefined} setProfile={setProfile} onBack={back} onLanguage={()=>go('language')} tr={tr}/>;
+ if(featureGroups.astronomy.some(x=>x[0]===page))return <ScientificPage id={page} Shell={Shell} Panel={Panel} onBack={back}/>;
+ if(featureGroups.jyotisha.some(x=>x[0]===page))return <PatraPage profile={profile||undefined} onBack={back} onAsk={ask} onSave={save}/>;
+ return <AdvancedHome profile={profile||{location:{name:'Patna'}}} onOpen={go} onAsk={ask}/>;
+}
 createRoot(document.getElementById('root')).render(<App/>);
