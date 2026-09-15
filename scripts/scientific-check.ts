@@ -11,6 +11,8 @@ import { computePanchanga } from '../src/core/panchanga/engine.ts';
 import { getRegionalPolicy, validateRegionalContext } from '../src/core/panchanga/regional.ts';
 import { REGIONAL_PANCHANGA_POLICIES } from '../src/core/panchanga/regional.ts';
 import { selectBoundary } from '../src/core/panchanga/day-boundary.ts';
+import { buildJyotishaChart } from '../src/core/panchanga/jyotisha.ts';
+import { getJyotishaWorkspace, JYOTISHA_WORKSPACES } from '../src/core/jyotisha-workspaces.ts';
 import { principalSigma2D } from '../src/core/astro/uncertainty.ts';
 import { evaluateAngularBenchmarks } from '../src/core/astro/benchmark-suite.ts';
 import { validatePropagationRequest } from '../src/core/astro/state-propagation.ts';
@@ -21,7 +23,7 @@ assertScientificInvariants(date);
 assertDynamicsInvariants();
 
 const location = { latitudeDeg: 25.5941, longitudeDeg: 85.1376, elevationMeters: 53, timeZone: 'Asia/Kolkata' };
-const p = computePanchanga(date, { sidereal: true, location, ruleSet: 'generic-lunisolar-v1' });
+const p = computePanchanga(date, { sidereal: true, location, ruleSet: 'regional:north-india' });
 if (!p.localDate || !p.timeZone || p.nakshatra.pada < 1 || p.nakshatra.pada > 4) throw new Error('Panchanga location invariant failed.');
 
 const site = observerGeometry(location);
@@ -47,10 +49,15 @@ if (Math.abs(flatOmegaResidual(cosmology)) > 1e-12) throw new Error('Cosmology f
 if (!(cosmicAgeGyr(cosmology, 1000) > 1 && cosmicAgeGyr(cosmology, 1000) < 30)) throw new Error('Cosmic age invariant failed.');
 if (!(lookbackTimeGyr(cosmology, 1, 1000) > 0)) throw new Error('Lookback time invariant failed.');
 
-const policy = getRegionalPolicy(REGIONAL_PANCHANGA_POLICIES[0].id);
+const policy = getRegionalPolicy('north-india');
 validateRegionalContext(policy, location);
 const midnight = selectBoundary(date, location, 'midnight');
 if (!(midnight.utc instanceof Date) || !midnight.localDateIso) throw new Error('Day-boundary invariant failed.');
+
+const chart = buildJyotishaChart(date, { longitudeDeg: location.longitudeDeg, location, ruleSet: 'regional:north-india' });
+if (chart.sun.signIndex < 0 || chart.sun.signIndex > 11 || chart.moon.signIndex < 0 || chart.moon.signIndex > 11) throw new Error('Jyotisha graha sign invariant failed.');
+if (chart.ayanamsa !== 'Lahiri') throw new Error('Jyotisha ayanamsa invariant failed.');
+if (!getJyotishaWorkspace('kundli') || JYOTISHA_WORKSPACES.length < 10) throw new Error('Jyotisha workspace catalogue invariant failed.');
 
 const ellipse = principalSigma2D({ xx: 4, xy: 1, yy: 1 });
 if (!(ellipse.major >= ellipse.minor && ellipse.minor >= 0)) throw new Error('Uncertainty ellipse invariant failed.');

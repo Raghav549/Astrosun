@@ -59,6 +59,8 @@ export * from './panchanga/location';
 export * from './panchanga/regional';
 export * from './panchanga/day-boundary';
 export * from './panchanga/engine';
+export * from './panchanga/jyotisha';
+export * from './jyotisha-workspaces';
 export * from './runtime';
 export * from './feature-catalog';
 export * from './feature-health';

@@ -15,27 +15,20 @@ export interface RegionalPanchangaPolicy {
   notes: readonly string[];
 }
 
+const NORTH_INDIA: RegionalPanchangaPolicy = {
+  id: 'north-india',
+  name: 'North India Purnimanta/Lahiri baseline',
+  region: 'North India',
+  monthSystem: 'purnimanta',
+  dayBoundary: 'sunrise',
+  festivalDayRule: 'sunrise-day',
+  ayanamsa: 'Lahiri',
+  notes: ['Baseline policy only; local sampradaya and festival authorities may define exceptions.'],
+};
+
 export const REGIONAL_PANCHANGA_POLICIES: readonly RegionalPanchangaPolicy[] = [
-  {
-    id: 'north-india',
-    name: 'North Indian sunrise-day policy (generic)',
-    region: 'North India',
-    monthSystem: 'purnimanta',
-    dayBoundary: 'sunrise',
-    festivalDayRule: 'sunrise-day',
-    ayanamsa: 'Lahiri',
-    notes: ['Declared computational baseline; exact festival observance may depend on local sampradaya and authority.'],
-  },
-  {
-    id: 'north-indian-generic',
-    name: 'North Indian Amanta/Purnimanta policy',
-    region: 'North India',
-    monthSystem: 'purnimanta',
-    dayBoundary: 'sunrise',
-    festivalDayRule: 'sunrise-day',
-    ayanamsa: 'Lahiri',
-    notes: ['Alias retained for backwards compatibility; exact festival observance may still depend on local sampradaya and authority.'],
-  },
+  NORTH_INDIA,
+  { ...NORTH_INDIA, id: 'north-indian-generic', name: 'North Indian Amanta/Purnimanta policy baseline' },
   {
     id: 'maharashtra-generic',
     name: 'Maharashtra Amanta policy',
@@ -59,7 +52,8 @@ export const REGIONAL_PANCHANGA_POLICIES: readonly RegionalPanchangaPolicy[] = [
 ];
 
 export function getRegionalPolicy(id: string): RegionalPanchangaPolicy {
-  const policy = REGIONAL_PANCHANGA_POLICIES.find((item) => item.id === id);
+  const normalized = id.trim().toLowerCase();
+  const policy = REGIONAL_PANCHANGA_POLICIES.find((item) => item.id === normalized);
   if (!policy) throw new Error(`Unknown Panchanga policy: ${id}`);
   return policy;
 }
