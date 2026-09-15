@@ -1,30 +1,5 @@
 {
-  "name": "astrosun",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit",
-    "scientific:check": "node --import tsx ./scripts/scientific-check.ts",
-    "deploy:check": "node ./scripts/deploy-sanity.mjs",
-    "runtime:smoke": "node ./scripts/runtime-smoke.mjs",
-    "client:smoke": "node ./scripts/client-smoke.mjs",
-    "feature:audit": "node ./scripts/feature-route-audit.mjs",
-    "server:start": "node server/index.mjs",
-    "preview": "vite preview",
-    "start": "vite --host 0.0.0.0"
-  },
-  "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "lucide-react": "latest",
-    "tsx": "latest",
-    "pg": "latest"
-  },
-  "devDependencies": {}
+  "name":"astrosun","private":true,"version":"0.1.0","type":"module",
+  "scripts":{"dev":"vite","build":"vite build","typecheck":"tsc --noEmit","scientific:check":"node --import tsx ./scripts/scientific-check.ts","deploy:check":"node ./scripts/deploy-sanity.mjs","runtime:smoke":"node ./scripts/runtime-smoke.mjs","client:smoke":"node ./scripts/client-smoke.mjs","feature:audit":"node ./scripts/feature-route-audit.mjs","manual:check":"node ./scripts/manual-production-check.mjs","server:start":"node server/index.mjs","preview":"vite preview","start":"vite --host 0.0.0.0"},
+  "dependencies":{"@vitejs/plugin-react":"latest","vite":"latest","typescript":"latest","react":"latest","react-dom":"latest","lucide-react":"latest","tsx":"latest","pg":"latest"},"devDependencies":{}
 }
