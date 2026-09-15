@@ -1,14 +1,14 @@
 import fs from 'node:fs';
 const root=new URL('../src/',import.meta.url);
-const files=['main-production.jsx','ui/jyotisha-advanced.jsx','ui/jyotisha-focused.jsx','ui/production-shell.jsx','ui/production-pages.jsx','core/panchanga/jyotisha.ts','core/jyotisha/workspace-engine.ts'];
+const files=['main-production.jsx','ui/jyotisha-advanced.jsx','ui/jyotisha-focused.jsx','ui/gemstone-workspace.jsx','ui/production-shell.jsx','ui/production-pages.jsx','core/panchanga/jyotisha.ts','core/jyotisha/workspace-engine.ts'];
 const source=files.map(f=>fs.readFileSync(new URL(f,root),'utf8')).join('\n');
 const requiredRoutes=['home','language','panchanga','patra','sky','astrophysics','research','settings','kundli','graha','bhava','nakshatra','dasha','transits','muhurta','vivah','rituals','gemstones','palm','evidence','ephemeris','dynamics','eclipse','observer','time','uncertainty','benchmarks','library'];
 const missing=requiredRoutes.filter(id=>!source.includes("'"+id+"'"));
 if(missing.length)throw new Error('Missing production routes: '+missing.join(', '));
-const requiredImplementations=['AdvancedHome','KundliPage','PatraPage','GemstonePage','PalmPage','GrahaPage','NakshatraPage','BhavaPage','DashaPage','TransitPage','VivahPage','RitualPage','EvidencePage','NorthIndianChart','GrahaTable','AnalysisCards','DashaPanel','DivisionalPanel','eventCandidates','navamsa','wholeSignHouses','dashaTimeline','compatibilityScore','/api/profile','/api/history'];
+const requiredImplementations=['AdvancedHome','KundliPage','PatraPage','GemstoneWorkspace','GemstoneDetailPage','PalmPage','GrahaPage','NakshatraPage','BhavaPage','DashaPage','TransitPage','VivahPage','RitualPage','EvidencePage','NorthIndianChart','GrahaTable','AnalysisCards','DashaPanel','DivisionalPanel','eventCandidates','navamsa','wholeSignHouses','dashaTimeline','compatibilityScore','/api/profile','/api/history','gemstone:'];
 for(const token of requiredImplementations)if(!source.includes(token))throw new Error('Missing substantive production implementation: '+token);
 for(const token of ['chart.planets','chart.ascendant','chart.moon','chart.sun','Rahu','Ketu','meanNodeTropical','localSiderealDeg','tropicalToSidereal'])if(!source.includes(token))throw new Error('Missing calculated chart layer: '+token);
 for(const token of ['2,3,5,7,10,11,13','Ashwini','Rohini','Pushya','Uttara Phalguni','Revati'])if(!source.includes(token))throw new Error('Missing declared muhurta rule data: '+token);
 if(source.includes('scientific-placeholder'))throw new Error('Placeholder CSS/class leaked into production source');
 if(source.includes('Unknown Panchanga policy'))throw new Error('Generic unknown-policy handling leaked into production source');
-console.log('Feature route audit: PASS ('+requiredRoutes.length+' routes; dedicated Jyotisha workspaces + astronomy registry + calculated Navagraha layer present)');
+console.log('Feature route audit: PASS ('+requiredRoutes.length+' routes; dedicated Jyotisha workspaces + exact gemstone detail navigation + calculated Navagraha layer present)');
