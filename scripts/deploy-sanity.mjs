@@ -19,7 +19,7 @@ for (const file of required) {
 }
 
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-for (const script of ['build', 'typecheck', 'scientific:check']) {
+for (const script of ['build', 'typecheck', 'scientific:check', 'deploy:check']) {
   if (!pkg.scripts?.[script]) throw new Error(`Missing npm script: ${script}`);
 }
 
