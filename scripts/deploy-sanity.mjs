@@ -19,14 +19,15 @@ for (const file of required) {
 }
 
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-for (const script of ['build', 'typecheck', 'scientific:check', 'deploy:check']) {
+for (const script of ['build', 'typecheck', 'scientific:check', 'deploy:check', 'runtime:smoke']) {
   if (!pkg.scripts?.[script]) throw new Error(`Missing npm script: ${script}`);
 }
 
 const main = fs.readFileSync(path.join(root, 'src/main.jsx'), 'utf8');
-if (!main.includes('./styles.css')) throw new Error('Main stylesheet reference missing');
+if (!main.includes('styles.css')) throw new Error('Main stylesheet import missing');
 if (!main.includes('LanguageGate')) throw new Error('Language gate missing');
 if (!main.includes('IntroScreen')) throw new Error('Intro screen missing');
 if (!main.includes('buildRuntimeSnapshot')) throw new Error('Runtime engine not wired');
+if (!main.includes('createRoot(document.getElementById')) throw new Error('React root bootstrap missing');
 
 console.log('AstroSun deployment sanity checks: PASS');
