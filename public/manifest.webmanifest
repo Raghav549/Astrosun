@@ -1,13 +1,13 @@
 {
-  "name":"AstroSun — Cosmic Intelligence",
-  "short_name":"AstroSun",
+  "name":"ऐस्ट्रोसुन — ब्रह्मांडीय बुद्धिमत्ता",
+  "short_name":"ऐस्ट्रोसुन",
   "start_url":"/",
   "scope":"/",
   "display":"standalone",
   "orientation":"portrait-primary",
   "background_color":"#f5f8ff",
   "theme_color":"#5d5cf1",
-  "description":"Research-oriented astronomy, astrophysics and Panchanga computation platform.",
+  "description":"अनुसंधान-केंद्रित खगोल विज्ञान, खगोलभौतिकी और पंचांग गणना मंच।",
   "icons":[
     {"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
     {"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
