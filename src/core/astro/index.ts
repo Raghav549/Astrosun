@@ -13,5 +13,4 @@ export * from './validation-matrix';
 export * from './invariants';
 export * from './observer';
 export * from './topocentric';
-export * from './horizons';
 export * from './rise-set';
