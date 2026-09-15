@@ -1,10 +1,15 @@
 {
-  "name": "AstroSun — Cosmic Intelligence",
-  "short_name": "AstroSun",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#f5fbf8",
-  "theme_color": "#0b6b5b",
-  "description": "Research-oriented astronomy, astrophysics and Panchanga computation platform.",
-  "icons": []
+  "name":"AstroSun — Cosmic Intelligence",
+  "short_name":"AstroSun",
+  "start_url":"/",
+  "scope":"/",
+  "display":"standalone",
+  "orientation":"portrait-primary",
+  "background_color":"#f5f8ff",
+  "theme_color":"#5d5cf1",
+  "description":"Research-oriented astronomy, astrophysics and Panchanga computation platform.",
+  "icons":[
+    {"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
 }
